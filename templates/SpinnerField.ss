@@ -1,0 +1,1 @@
+<input id="spinner-field-{$Name}" $AttributesHTML />
