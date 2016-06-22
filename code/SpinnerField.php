@@ -31,6 +31,7 @@ class SpinnerField extends TextField
             $this->setOptions($options);
         }
 
+        // Give the input same styling as a text field.
         $this->addExtraClass('text');
         $this->addExtraClass('spinner-field');
 
@@ -67,16 +68,25 @@ class SpinnerField extends TextField
      */
     public function Field($properties = array())
     {
-        $spinnerJSParameters['SpinnerOptions'] = '\'' . json_encode($this->getOptions()) . '\'';
-        $spinnerJSParameters['Name'] = '\'' . $this->name . '\'';
+        $spinnerOptions = '\'' . json_encode($this->getOptions()) . '\'';
+        $name = $this->name;
 
         Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
         Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery-ui.js');
         Requirements::javascript(THIRDPARTY_DIR . '/jquery-entwine/dist/jquery.entwine-dist.js');
         Requirements::javascript(SPINNER_FIELD_DIR . '/js/spinner-field.js');
-        Requirements::javascriptTemplate(
-            SPINNER_FIELD_DIR . '/js/init.js',
-            $spinnerJSParameters
+        
+        Requirements::customScript(<<<JS
+        (function($) {
+            $.entwine( 'ss', function( $ ) {
+                $( '#spinner-field-$name' ).entwine( {
+                    onmatch: function() {
+                        SpinnerField.init( $spinnerOptions, '$name' );
+                    }
+                } );
+            } );
+        })(jQuery);
+JS
         );
 
         return $this->customise($properties)->renderWith(['templates/SpinnerField']);
