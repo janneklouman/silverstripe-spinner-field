@@ -1,0 +1,24 @@
+{
+	"name": "silverstripe/spinnerfield",
+	"description": "A spinner field for SilverStripe using jQuery UI's Spinner Widget.",
+	"license": "MIT",
+	"type": "silverstripe-module",
+	"keywords": [
+		"silverstripe",
+		"spinner",
+		"field"
+	],
+	"authors": [
+		{
+			"name": "Janne Klouman",
+			"email": "janne@klouman.com",
+			"homepage": "http://github.com/janneklouman"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/janneklouman/silverstripe-spinner-field/issues"
+	},
+	"require": {
+		"silverstripe/framework": "~3.1"
+	}
+}
