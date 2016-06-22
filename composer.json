@@ -1,5 +1,5 @@
 {
-	"name": "silverstripe/spinnerfield",
+	"name": "janneklouman/spinnerfield",
 	"description": "A spinner field for SilverStripe using jQuery UI's Spinner Widget.",
 	"license": "MIT",
 	"type": "silverstripe-module",
