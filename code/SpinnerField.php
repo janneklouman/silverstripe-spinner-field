@@ -31,10 +31,6 @@ class SpinnerField extends TextField
             $this->setOptions($options);
         }
 
-        // Give the input same styling as a text field.
-        $this->addExtraClass('text');
-        $this->addExtraClass('spinner-field');
-
         parent::__construct($name, $title, $value);
     }
 
@@ -60,6 +56,11 @@ class SpinnerField extends TextField
         return $this->options;
     }
 
+    public function JSONOptions()
+    {
+        return json_encode($this->getOptions());
+    }
+
     /**
      * The actual spinner field.
      *
@@ -68,20 +69,21 @@ class SpinnerField extends TextField
      */
     public function Field($properties = array())
     {
-        $spinnerOptions = '\'' . json_encode($this->getOptions()) . '\'';
+        $spinnerOptions = json_encode($this->getOptions());
         $name = $this->name;
 
         Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
         Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery-ui.js');
         Requirements::javascript(THIRDPARTY_DIR . '/jquery-entwine/dist/jquery.entwine-dist.js');
         Requirements::javascript(SPINNER_FIELD_DIR . '/js/spinner-field.js');
-        
+
         Requirements::customScript(<<<JS
         (function($) {
             $.entwine( 'ss', function( $ ) {
                 $( '#spinner-field-$name' ).entwine( {
                     onmatch: function() {
-                        SpinnerField.init( $spinnerOptions, '$name' );
+                        // Pass options as a string (parsed to JSON in spinner-field.js)
+                        SpinnerField.init( '$spinnerOptions', '$name' );
                     }
                 } );
             } );
@@ -89,7 +91,10 @@ class SpinnerField extends TextField
 JS
         );
 
+        // Give the input same styling as a text field.
+        $this->addExtraClass('text');
+        $this->addExtraClass('spinner-field');
+
         return $this->customise($properties)->renderWith(['templates/SpinnerField']);
     }
-    
 }
