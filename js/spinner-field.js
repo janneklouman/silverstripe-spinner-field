@@ -27,26 +27,58 @@ var SpinnerField = (function (SpinnerField, $) {
     };
 
     /**
+     * @type {*|HTMLElement}
+     * @private
+     */
+    var _$fieldElement;
+
+    /**
      * Initialize component.
      *
      * @param options
      * @param name
      */
-    var init = function(options, name) {
+    var init = function( options, name ) {
 
         // Override options if passed through init function.
-        options = JSON.parse(options) || {};
-        for (var key in _options) {
-            if (_options.hasOwnProperty(key) && options.hasOwnProperty(key))
+        options = JSON.parse( options ) || {};
+        for ( var key in _options ) {
+            if ( _options.hasOwnProperty( key ) && options.hasOwnProperty( key ) )
                 _options[key] = options[key];
         }
 
-        $('#spinner-field-' + name).spinner(_options);
+        setFieldElement( $( 'input[name="' + name + '"]' ) );
+        applySpinner();
 
     };
 
+    /**
+     * @param $element
+     * @private
+     */
+    var setFieldElement = function($element) {
+        _$fieldElement = $element;
+    };
+
+    /**
+     * Initialize the jQuery UI Spinner.
+     */
+    var applySpinner = function() {
+        _$fieldElement.spinner(_options);
+    };
+
+    /**
+     * Returns the jQuery element.
+     *
+     * @returns {*|HTMLElement}
+     */
+    var getSpinner = function() {
+        return _$fieldElement;
+    };
+
     return {
-        init: init
+        init: init,
+        getSpinner: getSpinner
     }
 
 })(SpinnerField || {}, jQuery);
