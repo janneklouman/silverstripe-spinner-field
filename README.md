@@ -28,3 +28,19 @@ SpinnerField::create(
 ```
 
 ## Available options
+See https://api.jqueryui.com/spinner/ for detailed description of the options and their effects.
+```PHP
+// Available options and their default values
+[
+    culture      => null,
+    disabled     => false,
+    icon_down    => 'ui-icon-triangle-1-s',
+    icon_up      => 'ui-icon-triangle-1-n',
+    incremental  => true,
+    max          => null,
+    min          => null,
+    numberFormat => null,
+    page         => 10,
+    step         => 1
+]
+```
