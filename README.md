@@ -12,10 +12,10 @@ SpinnerField::create(
     'Answer',
 
     // Label
-    'What is the answer to the universe and everything?',
+    'What is the answer to the ultimate question of life, the universe, and everything?',
 
     // Initial value
-    rand(0,42),
+    rand(0, 42),
 
     // Optional options (see available options below)
     [
