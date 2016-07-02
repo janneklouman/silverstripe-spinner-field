@@ -122,7 +122,7 @@ class SpinnerField extends NumericField
     {
         if ($this->isValidUIOption($key)) {
             if ($key === 'icon_up' || $key === 'icon_down') {
-                return $this->spinnerUIOptions['icon'][substr($key, 5)] = $value;
+                return $this->spinnerUIOptions['icons'][substr($key, 5)] = $value;
             } else {
                 return $this->spinnerUIOptions[$key] = $value;
             }
