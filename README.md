@@ -43,9 +43,11 @@ You can configure the spinner widget's UI by passing an array of options in the 
 // Setting a batch of options.
 $spinnerField->setUIOptions(
     [
-        'disabled' => true,
-        'max'      => 314159265359,
-        'page'     => 100000000000
+        'disabled'  => true,
+        'max'       => 314159265359,
+        'page'      => 100000000000,
+        'icon_up'   => 'ui-icon-plus',
+        'icon_down' => 'ui-icon-minus'
     ]
 );
 
