@@ -26,7 +26,7 @@ SpinnerField::create(
     // Initial value
     rand(0, 42),
 
-    // Optional options (see available options below)
+    // Optional options (see available options below under heading: UI settings)
     [
         'min'  => 0,
         'max'  => 42,
@@ -37,22 +37,25 @@ SpinnerField::create(
 ```
 
 ## Configuration
-You can either pass an array of options in the constructor like shown [above](#example-usage), or you could do something like:
+#### UI settings
+You can configure the spinner widget's UI by passing an array of options in the constructor like shown [above](#example-usage), or you could do something like:
 ```PHP
 // Setting a batch of options.
-$spinnerField->setOptions(
+$spinnerField->setUIOptions(
     [
-        'disabled' => true,
-        'max'      => 314159265359,
-        'page'     => 100000000000
+        'disabled'  => true,
+        'max'       => 314159265359,
+        'page'      => 100000000000,
+        'icon_up'   => 'ui-icon-plus',
+        'icon_down' => 'ui-icon-minus'
     ]
 );
 
 // On second thought...
-$spinnerField->setOption('disabled', false);
+$spinnerField->setUIOption('disabled', false);
 ```
 
-See https://api.jqueryui.com/spinner/ for detailed description of the options and their effects.
+Here's a list of available UI options. See https://api.jqueryui.com/spinner/ for detailed description of the options and what they do.
 ```PHP
 // Available options and their default values
 [
@@ -68,3 +71,16 @@ See https://api.jqueryui.com/spinner/ for detailed description of the options an
     step         => 1
 ]
 ```
+
+#### Field settings
+```PHP
+/**
+ * Enforce step validation. Will cause validation to fail if input is
+ * not evenly divisible with the 'step' UI option. Example: if 'step'
+ * is set to 4, validation will fail for ($input && $input % 4 !== 0)
+ *
+ * @var bool
+ */
+protected $enforceStepValidation = false;
+```
+Furthermore see [NumericField](https://github.com/silverstripe/silverstripe-framework/blob/master/forms/NumericField.php) for inherited field settings.

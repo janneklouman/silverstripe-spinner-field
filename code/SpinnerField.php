@@ -1,8 +1,8 @@
 <?php
 
 /**
- * An input field that uses jQuery UI's customizable spinner to provide a
- * nice interface for fields that require number input.
+ * An input field that uses jQuery UI's customizable spinner widget to provide a
+ * nice interface for fields that require number input with specific validation.
  *
  * @package forms
  * @subpackage fields
@@ -11,18 +11,28 @@ class SpinnerField extends NumericField
 {
 
     /**
-     * Options that will be passed to the spinner.
+     * Options that will be passed to the jQuery UI spinner's initialization
+     * method. Set by using $this->setUIOption(), or $this->setUIOptions()
      *
      * @var array
      */
-    protected $options = [];
+    protected $spinnerUIOptions = [];
+
+    /**
+     * Enforce step validation. Will cause validation to fail if input is
+     * not evenly divisible with the 'step' UI option. Example: if 'step'
+     * is set to 4, validation will fail for ($input && $input % 4 !== 0)
+     *
+     * @var bool
+     */
+    protected $enforceStepValidation = false;
 
     /**
      * Available option keys.
      * 
      * @var array
      */
-    public static $available_options = [
+    public static $available_ui_options = [
         'culture',
         'disabled',
         'icon_up',
@@ -46,18 +56,19 @@ class SpinnerField extends NumericField
     public function __construct($name, $title = null, $value = '', array $options = null)
     {
         if ($options) {
-            $this->setOptions($options);
+            $this->setUIOptions($options);
         }
 
         parent::__construct($name, $title, $value);
     }
 
     /**
+     * @see $this->spinnerUIOptions
      * @return array
      */
-    public function getOptions()
+    public function getUIOptions()
     {
-        return $this->options;
+        return $this->spinnerUIOptions;
     }
 
     /**
@@ -67,11 +78,11 @@ class SpinnerField extends NumericField
      * @param array $options
      * @return $this
      */
-    public function setOptions(array $options)
+    public function setUIOptions(array $options)
     {
         if (is_array($options)) {
             foreach ($options as $key => $value) {
-                $this->setOption($key, $value);
+                $this->setUIOption($key, $value);
             }
         }
 
@@ -84,48 +95,70 @@ class SpinnerField extends NumericField
      * @param $key
      * @return mixed
      */
-    public function getOption($key)
+    public function getUIOption($key)
     {
-        if (array_key_exists($key, $this->getOptions())) {
-            return $this->getOptions()[$key];
+        if (array_key_exists($key, $this->getUIOptions())) {
+            return $this->getUIOptions()[$key];
         }
 
         if ($key === 'icon_up'
             || $key === 'icon_down'
-            && isset($this->getOptions()['icon'][substr($key, 5)])
+            && isset($this->getUIOptions()['icon'][substr($key, 5)])
         ) {
-            return $this->getOptions()['icon'][substr($key, 5)];
+            return $this->getUIOptions()['icon'][substr($key, 5)];
         }
 
         return false;
     }
 
     /**
-     * Set an option value.
+     * Set a UI option value based on key. See self::$available_ui_options.
      *
      * @param $key
      * @param $value
+     * @return bool
      */
-    public function setOption($key, $value)
+    public function setUIOption($key, $value)
     {
-        if ($this->isOption($key)) {
+        if ($this->isValidUIOption($key)) {
             if ($key === 'icon_up' || $key === 'icon_down') {
-                $this->options['icon'][substr($key, 5)] = $value;
+                return $this->spinnerUIOptions['icons'][substr($key, 5)] = $value;
             } else {
-                $this->options[$key] = $value;
+                return $this->spinnerUIOptions[$key] = $value;
             }
         }
+
+        return false;
     }
 
     /**
-     * Check if an option key exists.
+     * @see $this->enforceStepValidation.
+     * @return bool
+     */
+    public function getEnforceStepValidation()
+    {
+        return $this->enforceStepValidation;
+    }
+
+    /**
+     * @see $this->enforceStepValidation.
+     * @param bool $value
+     * @return bool
+     */
+    public function setEnforceStepValidation($value)
+    {
+        return $this->enforceStepValidation = (bool) $value;
+    }
+
+    /**
+     * Check if a UI option key exists.
      *
      * @param $key
      * @return bool
      */
-    public function isOption($key)
+    public function isValidUIOption($key)
     {
-        return in_array($key, self::$available_options);
+        return in_array($key, self::$available_ui_options);
     }
     
     /**
@@ -152,7 +185,7 @@ class SpinnerField extends NumericField
          * Set options as a HTML attribute to supply init.js
          * with data to initialize the spinner.
          */
-        $this->setAttribute('data-spinner-options', json_encode($this->getOptions()));
+        $this->setAttribute('data-spinner-options', json_encode($this->getUIOptions()));
 
         return $this->customise($properties)->renderWith(['templates/SpinnerField']);
     }
@@ -163,11 +196,13 @@ class SpinnerField extends NumericField
      * @param Validator $validator
      * @return bool
      */
-    public function validate($validator) {
-
+    public function validate($validator)
+    {
         if (!$this->value) {
             return true;
         }
+
+        $validationChecks = [true];
 
         if (!$this->isNumeric()) {
             $validator->validationError(
@@ -180,10 +215,10 @@ class SpinnerField extends NumericField
                 'validation'
             );
 
-            return false;
+            $validationChecks[] = false;
         }
 
-        if ($this->getOption('max') && $this->value > $this->getOption('max')) {
+        if ($this->getUIOption('max') && $this->value > $this->getUIOption('max')) {
             $validator->validationError(
                 $this->name,
                 _t(
@@ -191,16 +226,16 @@ class SpinnerField extends NumericField
                     '\'{value}\' exceeds the maximum allowed number {max}',
                     [
                         'value' => $this->value,
-                        'max' => $this->getOption('max')
+                        'max'   => $this->getUIOption('max')
                     ]
                 ),
                 'validation'
             );
 
-            return false;
+            $validationChecks[] = false;
         }
 
-        if ($this->getOption('min') && $this->value < $this->getOption('min')) {
+        if ($this->getUIOption('min') && $this->value < $this->getUIOption('min')) {
             $validator->validationError(
                 $this->name,
                 _t(
@@ -208,15 +243,32 @@ class SpinnerField extends NumericField
                     '\'{value}\' is below the minimum allowed number {min}',
                     [
                         'value' => $this->value,
-                        'min' => $this->getOption('min')
+                        'min'   => $this->getUIOption('min')
                     ]
                 ),
                 'validation'
             );
 
-            return false;
+            $validationChecks[] = false;
         }
 
-        return true;
+        if ($this->getEnforceStepValidation() && $this->value % $this->getUIOption('step') !== 0) {
+            $validator->validationError(
+                $this->name,
+                _t(
+                    'SpinnerField.NOTEVENLYDIVISIBLE',
+                    '\'{value}\' is not evenly divisible by {step}',
+                    [
+                        'value' => $this->value,
+                        'step'  => $this->getUIOption('step')
+                    ]
+                ),
+                'validation'
+            );
+
+            $validationChecks[] = false;
+        }
+
+        return min($validationChecks);
     }
 }
