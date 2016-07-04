@@ -1,7 +1,7 @@
 {
 	"name": "janneklouman/silverstripe-spinner-field",
 	"description": "A spinner field for SilverStripe using jQuery UI's Spinner Widget.",
-	"license": "MIT",
+	"license": "BSD-3-Clause",
 	"type": "silverstripe-module",
 	"keywords": [
 		"silverstripe",
