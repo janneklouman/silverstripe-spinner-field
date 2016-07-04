@@ -16,10 +16,10 @@
 		}
 	],
 	"support": {
-		"issues": "https://github.com/janneklouman/silverstripe-spinner-field/issues"
+		"issues": "https://waffle.io/janneklouman/silverstripe-spinner-field"
 	},
 	"require": {
-        "php": "^5.4",
-		"silverstripe/framework": "~3.1"
+        "php": ">=5.4",
+		"silverstripe/framework": "^3.1"
 	}
 }
