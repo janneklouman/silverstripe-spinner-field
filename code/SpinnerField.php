@@ -256,6 +256,8 @@ class SpinnerField extends NumericField
 
             if (!$this->getUIOption('culture')) {
                 $this->setUIOption('culture', str_replace('_', '-', $this->getLocale()));
+            } else {
+                $this->setLocale(str_replace('-', '_', $this->getUIOption('culture')));
             }
 
             $this->setUIOption('numberFormat', 'n');
