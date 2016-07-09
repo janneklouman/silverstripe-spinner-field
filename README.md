@@ -66,7 +66,7 @@ Here's a list of available UI options. See https://api.jqueryui.com/spinner/ for
     incremental  => true,
     max          => null,
     min          => null,
-    numberFormat => null,
+    numberFormat => null, // Currently only 'n'||null is supported
     page         => 10,
     step         => 1
 ]
@@ -77,10 +77,26 @@ Here's a list of available UI options. See https://api.jqueryui.com/spinner/ for
 /**
  * Enforce step validation. Will cause validation to fail if input is
  * not evenly divisible with the 'step' UI option. Example: if 'step'
- * is set to 4, validation will fail for ($input && $input % 4 !== 0)
+ * is set to 4, validation will fail for 0 !== $input % 4
  *
  * @var bool
  */
 protected $enforceStepValidation = false;
+```
+```PHP
+/**
+ * Will cause validation to fail if input is below the 'min' UI option.
+ *
+ * @var bool
+ */
+protected $enforceBelowMinValidation = true;
+```
+```PHP
+/**
+ * Will cause validation to fail if input is above the 'max' UI option.
+ *
+ * @var bool
+ */
+protected $enforceAboveMaxValidation = true;
 ```
 Furthermore see [NumericField](https://github.com/silverstripe/silverstripe-framework/blob/master/forms/NumericField.php) for inherited field settings.
