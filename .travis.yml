@@ -32,4 +32,4 @@ before_script:
   - composer install
 
 script:
-  - vendor/bin/phpunit sitewidecontent-report/tests
+  - vendor/bin/phpunit silverstripe-spinner-field/tests
