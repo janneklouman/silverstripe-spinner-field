@@ -307,7 +307,7 @@ class SpinnerField extends NumericField
             $validationChecks[] = false;
         }
 
-        if ($this->getUIOption('max')
+        if (($this->getUIOption('max') || $this->getUIOption('max') === 0)
             && $this->getEnforceAboveMaxValidation()
             && $this->value > $this->getUIOption('max')
         ) {
@@ -327,7 +327,7 @@ class SpinnerField extends NumericField
             $validationChecks[] = false;
         }
 
-        if ($this->getUIOption('min')
+        if (($this->getUIOption('min') || $this->getUIOption('min') === 0)
             && $this->getEnforceBelowMinValidation()
             && $this->value < $this->getUIOption('min')) {
             $validator->validationError(
