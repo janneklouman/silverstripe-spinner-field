@@ -240,7 +240,7 @@ class SpinnerField extends NumericField
     {
         // Javascript requirements.
         Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
-        Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery-ui.js');
+        Requirements::javascript(THIRDPARTY_DIR . '/jquery-ui/jquery-ui.js');
         Requirements::javascript(THIRDPARTY_DIR . '/jquery-entwine/dist/jquery.entwine-dist.js');
         Requirements::javascript(SPINNER_FIELD_DIR . '/js/spinner-field.js');
 
