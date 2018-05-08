@@ -11,7 +11,7 @@ A spinner field for SilverStripe using jQuery UI's Spinner Widget providing a ni
 
 ## Installation
 
-`composer require janneklouman/silverstripe-spinner-field`
+`composer require jjjjjjjjjjjjjjjjjjjj/silverstripe-spinner-field`
 
 ## Example usage
 ```PHP
